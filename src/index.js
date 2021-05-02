@@ -24,9 +24,9 @@ app.listen(port, () => {
 
 async function consumeRssFeed(url, itemCount){
 
-  let feed = await parser.parseURL(url);
+  let result = await parser.parseURL(url);
   // console.log(`feed: ${feed}`);
-  result = feed.items.slice(0,itemCount);
+  result.items = result.items.slice(0,itemCount);
 
   return result;
 }
