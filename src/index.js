@@ -11,7 +11,7 @@ const episodeCount = 10;
 
 app.get('/', async (req, res) => {
   //let result = 'Hello World!';
-  let result = await consumeRssFeed(rssUrl);
+  let result = await consumeRssFeed(rssUrl, episodeCount);
   res.send(result);
 })
 
@@ -22,10 +22,14 @@ app.listen(port, () => {
 })
 
 
-async function consumeRssFeed(url){
+async function consumeRssFeed(url, itemCount){
 
   let feed = await parser.parseURL(url);
+  // console.log(`feed: ${feed}`);
+  result = feed.items.slice(0,itemCount);
 
-  console.log(`feed: ${feed}`);
-  return feed;
+  return result;
 }
+
+
+
