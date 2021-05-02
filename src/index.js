@@ -9,10 +9,12 @@ const episodeCount = 10;
 
 
 
-app.get('/', (req, res) => {
-  let result = 'Hello World!';
+app.get('/', async (req, res) => {
+  //let result = 'Hello World!';
+  let result = await consumeRssFeed(rssUrl);
   res.send(result);
 })
+
 
 
 app.listen(port, () => {
@@ -20,4 +22,10 @@ app.listen(port, () => {
 })
 
 
+async function consumeRssFeed(url){
 
+  let feed = await parser.parseURL(url);
+
+  console.log(`feed: ${feed}`);
+  return feed;
+}
