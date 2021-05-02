@@ -12,6 +12,7 @@ const episodeCount = 10;
 app.get('/', async (req, res) => {
   //let result = 'Hello World!';
   let result = await consumeRssFeed(rssUrl, episodeCount);
+  result = transformFeed(result);
   res.send(result);
 })
 
@@ -25,7 +26,7 @@ app.listen(port, () => {
 async function consumeRssFeed(url, itemCount){
 
   let result = await parser.parseURL(url);
-  // console.log(`feed: ${feed}`);
+  // console.log(`result: ${result}`);
   result.items = result.items.slice(0,itemCount);
 
   return result;
@@ -33,3 +34,23 @@ async function consumeRssFeed(url, itemCount){
 
 
 
+function transformFeed(feed){
+
+  let remappedEpisodes = feed.items.map(
+    (item) => {
+      newItem = {
+        title: item.title,
+        audioUrl: item.enclosure.url,
+        publishedDate: item.isoDate
+      };
+      return newItem;
+  });
+
+  let result = {
+    title:        feed.title,
+    description:  feed.description,
+    episodes:     remappedEpisodes
+  };
+
+  return result;
+}
