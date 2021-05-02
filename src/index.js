@@ -7,6 +7,8 @@ const parser = new Parser();
 const rssUrl = 'https://www.nasa.gov/rss/dyn/Houston-We-Have-a-Podcast.rss';
 const episodeCount = 10;
 
+const formatIsoDate = require('./utilities/format-iso-date-to-AEST');
+
 
 
 app.get('/', async (req, res) => {
@@ -41,7 +43,7 @@ function transformFeed(feed){
       newItem = {
         title: item.title,
         audioUrl: item.enclosure.url,
-        publishedDate: item.isoDate
+        publishedDate: formatIsoDate.convertISODateToAEST(item.isoDate)
       };
       return newItem;
   });
