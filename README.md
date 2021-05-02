@@ -49,7 +49,7 @@ This is a challenge to code an API that returns the `Houston, We have a Podcast`
 This is not an essential requirement but is a nice to have:
 
 - Create another endpoint `/sort`. This endpoint accepts a query parameter called `order`. The order can either be `asc` for ascending or `dsc` for descending.
-  This endpoint should return the same payload as the root route, but the 10 episodes return are sorted by their published date according to the `order` query.
+  This endpoint should return the same payload as the root route, but the 10 episodes returned are sorted by their published date according to the `order` query.
   So if the order query is `dsc`  the latest 10 episodes are returned and if the order query is `asc` then the first 10 episodes are returned.
 
 ## Getting Started
