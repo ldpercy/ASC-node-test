@@ -19,16 +19,37 @@ app.get('/', async (req, res) => {
 })
 
 
+app.get('/sort', async (req, res) => {
+  let result = await consumeRssFeed(rssUrl, episodeCount, req.query.order);
+  result = transformFeed(result);
+  res.send(result);
+})
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
 
-async function consumeRssFeed(url, itemCount){
+async function consumeRssFeed(url, itemCount, sort){
 
   let result = await parser.parseURL(url);
-  // console.log(`result: ${result}`);
+
+  // console.log(`sort: ${sort}`);
+
+  switch(sort) {
+    case 'asc':
+        result.items.sort((a,b) => (a.isoDate < b.isoDate) ? -1 : 1);
+        break;
+    case 'dsc':
+        result.items.sort((a,b) => (a.isoDate > b.isoDate) ? -1 : 1);
+        break;
+    default:
+        // leave items in natural order if sort unspecified
+  }
+
+  // move this above the switch if wanting to sort the truncated results:
   result.items = result.items.slice(0,itemCount);
 
   return result;
