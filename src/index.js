@@ -12,14 +12,14 @@ const rssService = require('./service/rss-service');
 
 app.get('/', async (req, res) => {
   let rawFeed = await rssService.retrieveRssFeed(rssUrl, episodeCount);
-  response = rssService.transformRawFeed(rawFeed);
+  let response = rssService.transformRawFeed(rawFeed);
   res.send(response);
 })
 
 
 app.get('/sort', async (req, res) => {
   let rawFeed = await rssService.retrieveRssFeed(rssUrl, episodeCount, req.query.order);
-  response = rssService.transformRawFeed(rawFeed);
+  let response = rssService.transformRawFeed(rawFeed);
   res.send(response);
 })
 

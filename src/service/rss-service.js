@@ -34,7 +34,7 @@ function transformRawFeed(rawFeed){
 
   let remappedEpisodes = rawFeed.items.map(
     (item) => {
-      episode = {
+      let episode = {
         title:          item.title,
         audioUrl:       item.enclosure.url,
         publishedDate:  formatIsoDate.convertISODateToAEST(item.isoDate)
