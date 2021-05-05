@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const Parser = require('rss-parser');
-const parser = new Parser();
+const RssParser = require('rss-parser');
+const rssParser = new RssParser();
 const rssUrl = 'https://www.nasa.gov/rss/dyn/Houston-We-Have-a-Podcast.rss';
 const episodeCount = 10;
 
@@ -12,16 +12,16 @@ const formatIsoDate = require('./utilities/format-iso-date-to-AEST');
 
 
 app.get('/', async (req, res) => {
-  let result = await consumeRssFeed(rssUrl, episodeCount);
-  result = transformFeed(result);
-  res.send(result);
+  let rawFeed = await retrieveRssFeed(rssUrl, episodeCount);
+  response = transformRawFeed(rawFeed);
+  res.send(response);
 })
 
 
 app.get('/sort', async (req, res) => {
-  let result = await consumeRssFeed(rssUrl, episodeCount, req.query.order);
-  result = transformFeed(result);
-  res.send(result);
+  let rawFeed = await retrieveRssFeed(rssUrl, episodeCount, req.query.order);
+  response = transformRawFeed(rawFeed);
+  res.send(response);
 })
 
 
@@ -31,44 +31,44 @@ app.listen(port, () => {
 })
 
 
-async function consumeRssFeed(url, itemCount, sort){
+async function retrieveRssFeed(url, itemCount, sort){
 
-  let result = await parser.parseURL(url);
+  let feed = await rssParser.parseURL(url);
 
   switch(sort) {
     case 'asc':
-      result.items.sort((a,b) => (a.isoDate < b.isoDate) ? -1 : 1);
+      feed.items.sort((a,b) => (a.isoDate < b.isoDate) ? -1 : 1);
       break;
     case 'dsc':
-      result.items.sort((a,b) => (a.isoDate > b.isoDate) ? -1 : 1);
+      feed.items.sort((a,b) => (a.isoDate > b.isoDate) ? -1 : 1);
       break;
     default:
       // leave items in natural order if sort unspecified
   }
 
   // move this above the switch if wanting to sort the truncated results:
-  result.items = result.items.slice(0,itemCount);
+  feed.items = feed.items.slice(0,itemCount);
 
-  return result;
+  return feed;
 }
 
 
 
-function transformFeed(feed){
+function transformRawFeed(rawFeed){
 
-  let remappedEpisodes = feed.items.map(
+  let remappedEpisodes = rawFeed.items.map(
     (item) => {
-      newItem = {
-        title: item.title,
-        audioUrl: item.enclosure.url,
-        publishedDate: formatIsoDate.convertISODateToAEST(item.isoDate)
+      episode = {
+        title:          item.title,
+        audioUrl:       item.enclosure.url,
+        publishedDate:  formatIsoDate.convertISODateToAEST(item.isoDate)
       };
-      return newItem;
+      return episode;
   });
 
   let result = {
-    title:        feed.title,
-    description:  feed.description,
+    title:        rawFeed.title,
+    description:  rawFeed.description,
     episodes:     remappedEpisodes
   };
 
