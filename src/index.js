@@ -12,7 +12,6 @@ const formatIsoDate = require('./utilities/format-iso-date-to-AEST');
 
 
 app.get('/', async (req, res) => {
-  //let result = 'Hello World!';
   let result = await consumeRssFeed(rssUrl, episodeCount);
   result = transformFeed(result);
   res.send(result);
@@ -36,17 +35,15 @@ async function consumeRssFeed(url, itemCount, sort){
 
   let result = await parser.parseURL(url);
 
-  // console.log(`sort: ${sort}`);
-
   switch(sort) {
     case 'asc':
-        result.items.sort((a,b) => (a.isoDate < b.isoDate) ? -1 : 1);
-        break;
+      result.items.sort((a,b) => (a.isoDate < b.isoDate) ? -1 : 1);
+      break;
     case 'dsc':
-        result.items.sort((a,b) => (a.isoDate > b.isoDate) ? -1 : 1);
-        break;
+      result.items.sort((a,b) => (a.isoDate > b.isoDate) ? -1 : 1);
+      break;
     default:
-        // leave items in natural order if sort unspecified
+      // leave items in natural order if sort unspecified
   }
 
   // move this above the switch if wanting to sort the truncated results:
