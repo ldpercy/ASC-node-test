@@ -13,7 +13,7 @@ This challenge should take no longer than a coupe of hours to complete & is here
 - Implement the essential requirements
 - Use Javascript and Node js
 - Write functional and good quality code
-- Push the results to some remote source control (like Git)
+- Push the results to a publicly available source control repository (for example GitHub, GitLab, BitBucket)
 
 Please commit early and often, so that we can see how problems are solved. 
 
